@@ -18,7 +18,11 @@ return {
         enabled = true,
         timeout = 3000,
       },
-      picker = { enabled = true },
+      picker = { enabled = true,
+          find = {
+            rg_opts = "--hidden --glob '!.git/' --glob '!node_modules/' --glob '!dist/' --glob '!build/'"
+          }
+      },
       quickfile = { enabled = true },
       scope = { enabled = true },
       scroll = { enabled = true },
