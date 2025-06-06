@@ -724,7 +724,7 @@ require('lazy').setup({
         -- <c-k>: Toggle signature help
         --
         -- See :h blink-cmp-config-keymap for defining your own keymap
-        preset = 'default',
+        preset = 'super-tab',
 
         -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
         --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
@@ -979,7 +979,7 @@ vim.api.nvim_create_autocmd('VimEnter', {
     vim.keymap.set('n', '<leader><space>', function() Snacks.picker.smart() end)
 
     -- Press Space+/ to open the grep picker
-    vim.keymap.set('n', '<leader>/', function() Snacks.picker.smar() end)
+    vim.keymap.set('n', '<leader>/', function() Snacks.picker.grep() end)
 
     -- Press Space+f+f to find files
     vim.keymap.set('n', '<leader>ff', function() Snacks.picker.files() end)
@@ -1000,13 +1000,12 @@ vim.api.nvim_create_autocmd('VimEnter', {
   end,
 })
 
--- Tab navigation with Cmd+number
 vim.api.nvim_create_autocmd('VimEnter', {
   callback = function()
-    for i = 1, 9 do
-      vim.keymap.set('n', string.format('<D-%d>', i), 
-                    string.format('%dgt', i), 
-                    { desc = string.format('Go to tab %d', i) })
-    end
+    require('blink.cmp').setup({
+      keymap = {
+        preset = 'super-tab',  -- Use tab for completion instead of default
+      }
+    })
   end,
 })
