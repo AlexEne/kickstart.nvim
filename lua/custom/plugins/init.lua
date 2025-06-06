@@ -11,7 +11,7 @@ return {
     opts = {
       bigfile = { enabled = true },
       dashboard = { enabled = true },
-      explorer = { enabled = true },
+      explorer = { enabled = true, replace_netrw = true },
       indent = { enabled = true, animate = { enabled = false } },
       input = { enabled = true },
       notifier = {
@@ -474,7 +474,7 @@ return {
       },
       {
         '<c-/>',
-        function()
+          function()
           Snacks.terminal()
         end,
         desc = 'Toggle Terminal',
@@ -520,6 +520,11 @@ return {
           }
         end,
       },
+      {
+        '<leader>qa',
+        ':wqa<CR>',
+        desc = 'Save and quit all windows',
+      },
     },
     init = function()
       vim.api.nvim_create_autocmd('User', {
@@ -554,6 +559,20 @@ return {
     'numToStr/Comment.nvim',
     opts = {
       -- add any options here
+    },
+  },
+  {
+    'folke/persistence.nvim',
+    event = 'BufReadPre',
+    opts = { options = { 'buffers', 'curdir', 'tabpages', 'winsize', 'help', 'globals', 'skiprtp' } },
+    keys = {
+      { '<leader>qs', function() require('persistence').load() end, desc = 'Restore Session' },
+      { '<leader>ql', function() require('persistence').load({ last = true }) end, desc = 'Restore Last Session' },
+      { '<leader>qd', function() require('persistence').stop() end, desc = 'Don\'t Save Current Session' },
+      { '<leader>qe', function() 
+          require('persistence').load()
+          vim.defer_fn(function() Snacks.explorer() end, 1000)
+        end, desc = 'Restore Session with Explorer' },
     },
   },
 }

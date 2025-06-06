@@ -194,10 +194,11 @@ vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' }
 --  Use CTRL+<hjkl> to switch between windows
 --
 --  See `:help wincmd` for a list of all window commands
-vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
-vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
-vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
-vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+vim.keymap.set('n', '<C-S-Left>', '<C-w>h', { desc = 'Move focus to the left window' })
+vim.keymap.set('n', '<C-S-Right>', '<C-w>l', { desc = 'Move focus to the right window' })
+vim.keymap.set('n', '<C-S-Down>', '<C-w>j', { desc = 'Move focus to the lower window' })
+vim.keymap.set('n', '<C-S-Up>', '<C-w>k', { desc = 'Move focus to the upper window' })
+
 
 -- NOTE: Some terminals have colliding keymaps or are not able to send distinct keycodes
 -- vim.keymap.set("n", "<C-S-h>", "<C-w>H", { desc = "Move window to the left" })
@@ -1000,12 +1001,21 @@ vim.api.nvim_create_autocmd('VimEnter', {
   end,
 })
 
-vim.api.nvim_create_autocmd('VimEnter', {
-  callback = function()
-    require('blink.cmp').setup({
-      keymap = {
-        preset = 'super-tab',  -- Use tab for completion instead of default
-      }
-    })
-  end,
+
+vim.keymap.set({'n', 'i', 'v'}, '<D-s>', function()
+    vim.cmd('write')
+    if vim.fn.mode() == 'i' then
+        vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Esc>a', true, false, true), 'n', true)
+    end
+end, {
+    desc = 'Save file (Cmd+S)'
+})
+
+vim.keymap.set({'n', 'i', 'v'}, '<C-s>', function()
+    vim.cmd('write')
+    if vim.fn.mode() == 'i' then
+        vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Esc>a', true, false, true), 'n', true)
+    end
+end, {
+    desc = 'Save file (Cmd+S)'
 })
